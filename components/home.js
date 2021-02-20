@@ -1,8 +1,9 @@
-import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, StyleSheet, TouchableOpacity} from 'react-native';
 import React from 'react';
-import {Button} from '@ui-kitten/components';
 import {screens} from '../App';
 import {useNavigation} from '@react-navigation/native';
+import AppButton from "./appButton";
+import AppText from "./appText";
 
 const styles = StyleSheet.create({
   container: {
@@ -14,44 +15,38 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     width: 200,
   },
-  buttonGhost: {
-    margin: 2,
-    marginTop: 5,
-    width: 200,
-    textDecorationLine: 'underline',
-  },
   homeTittle: {
     fontSize: 25,
     fontWeight: 'bold',
   },
-  ghostContainer: {
-    marginTop: 30,
+  view: {
+    flex: 1,
     alignItems: 'center',
-  },
+    justifyContent: 'center'
+  }
 });
 
-export const Home = () => {
+export const Home = ({route}) => {
   const navigator = useNavigation();
+  const buyerLogged = route.params.logged;
+
+  const titulo = 'Bienvenido '+ (buyerLogged.nombre).toUpperCase();
+
+  const labelListar = 'Listar productos';
+  const labelCategorias = 'Ver categorías';
+  const labelCompradores = 'Compradores';
+
+  const toListar = () => navigator.navigate(screens.listar, {buyerLogged});
+  const toCategorias = () => navigator.navigate(screens.listaCategorias, {buyerLogged});
+  const toCompradores = () => navigator.navigate(screens.compradores, {buyerLogged});
 
   return (
-    <View
-      style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
-      <Text style={styles.homeTittle}>Bienvenidos!</Text>
+    <View style={styles.view}>
+      <AppText style={styles.homeTittle} content={titulo}/>
       <View style={styles.container}>
-        <Button
-          style={styles.button}
-          appearance="outline"
-          status="info"
-          onPress={() => navigator.navigate(screens.listar)}>
-          LISTAR PRODUCTOS
-        </Button>
-        <Button
-          style={styles.button}
-          appearance="outline"
-          status="info"
-          onPress={() => navigator.navigate(screens.listaCategorias)}>
-          VER CATEGORÍAS
-        </Button>
+        <AppButton style={styles.button} onPress={toListar} content={labelListar}/>
+        <AppButton style={styles.button} onPress={toCategorias} content={labelCategorias}/>
+        <AppButton style={styles.button} onPress={toCompradores} content={labelCompradores}/>
       </View>
     </View>
   );
