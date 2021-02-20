@@ -10,13 +10,12 @@ export const Shop = ({productoComprador}) => {
   const name = 'Comprado por: '+productoComprador.logueado.nombre;
 
   return (
-    //VER EL STYLE
     <View style={{flex: 1, alignItems: 'center', justifyContent: 'space-evenly'}}>
       <View style={styles.container}>
         <AppText content={ title }/>
         <AppText content={ price }/>
         <AppText content={ name }/>
-        <AppButton onPress={() => navigator.navigate(screens.comprador)} content={COMPRAR}/>
+        <AppButton onPress={() => navigator.navigate(screens.listaCompradores)} content={COMPRAR}/>
       </View>
     </View>
   );

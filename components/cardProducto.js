@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const Tarjeta = ({titulo, precio, onVerDetalles, onComprar}) => {
+const CardProducto = ({titulo, precio, onVerDetalles, onComprar}) => {
   return (
     <Card style={styles.card}>
       <View style={styles.tituloContainer}>
@@ -41,4 +41,4 @@ const Tarjeta = ({titulo, precio, onVerDetalles, onComprar}) => {
   );
 };
 
-export default Tarjeta;
+export default CardProducto;

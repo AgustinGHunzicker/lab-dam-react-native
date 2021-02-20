@@ -1,4 +1,4 @@
-import React, {useState, createContext, useEffect} from 'react';
+import React, {createContext, useEffect, useState} from 'react';
 import axios from 'axios';
 
 export const API_URL = 'https://api.mercadolibre.com/sites/MLA/search?q=Motorola%20G6';
@@ -13,8 +13,14 @@ export const StoreProvider = ({children}) => {
     {nombre: 'Categoria 3', color: 'green', id: Math.random().toString(10)},
     {nombre: 'Categoria 4', color: 'yellow', id: Math.random().toString(10)},
   ]);
+  const [productosComprados, setProductosComprados] = useState([ {nombre: 'Categoria 1', precio: '2', id: Math.random().toString(10)}]);
   const [categoriasProductos, setCategoriasProductos] = useState({});
   const [compradores, setCompradores] = useState([
+    {
+      nombre: 'Kton',
+      email: 'a',
+      id: Math.random().toString(10),
+    },
     {
       nombre: 'Kton',
       email: 'milton@gmail.com',
@@ -31,9 +37,6 @@ export const StoreProvider = ({children}) => {
       id: Math.random().toString(10),
     },
   ]);
-  const [compradoresProductos, setCompradoresProductos] = useState({});
-  const [productosComprados, setProductosComprados] = useState({});
-
 
   const fetchData = async () => {
     try {
@@ -81,38 +84,26 @@ export const StoreProvider = ({children}) => {
         categoriasProductos[cur].includes(producto.id) ? [...acc, cur] : acc,
       [],
     );
-    const results = categorias.filter((c) =>
+    return categorias.filter((c) =>
       categoriasIdDelProducto.includes(c.id),
     );
-    return results;
   };
 
   const agregarProductoAComprador = (comprador, producto) => {
     if (!comprador?.id || !producto?.id) {
-      return; // No hay id de categoria o producto
+      return;
     }
-    const compradorProducto = compradoresProductos[comprador.id] ?? [];
-    if (!compradorProducto.includes(producto.id)) {
-      //Si no esta lo agregamos
-      const newCompradoresProductos = {
-        ...compradoresProductos,
-        [comprador.id]: [...compradorProducto, producto.id],
-      };
-      setCompradoresProductos(newCompradoresProductos);
-    }
+    setProductosComprados([...productosComprados, producto]);
+    alert(productosComprados);
   };
 
-  const obtenerCompradoresDelProducto = (producto) => {
-    const compradoresId = Object.keys(compradoresProductos);
-    const compradoresIdDelProducto = compradoresId.reduce(
-      (acc, cur) =>
-        compradoresProductos[cur].includes(producto.id) ? [...acc, cur] : acc,
-      [],
-    );
-    const results = compradores.filter((c) =>
-      compradoresIdDelProducto.includes(c.id),
-    );
-    return results;
+  const obtenerProductosDelComprador = (comprador) => {
+    if (!comprador?.id) {
+      alert("no tiene id")
+      return;
+    }
+    alert("a"+productosComprados);
+    return productosComprados.includes(comprador?.id);
   };
 
   useEffect(() => { fetchData(); }, []);
@@ -129,7 +120,7 @@ export const StoreProvider = ({children}) => {
         obtenerCategoriasDelProducto,
         compradores,
         setCompradores,
-        obtenerCompradoresDelProducto,
+        obtenerCompradoresDelProducto: obtenerProductosDelComprador,
         agregarProductoAComprador,
       }}>
       {children}

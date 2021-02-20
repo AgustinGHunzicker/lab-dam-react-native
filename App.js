@@ -13,6 +13,7 @@ import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import ListaCompradores from "./components/listaCompradores";
 import Shop from "./components/shop";
 import IniciarSesion from "./components/iniciarSesion";
+import ListaCompras from "./components/listaComprados";
 
 const Stack = createStackNavigator();
 

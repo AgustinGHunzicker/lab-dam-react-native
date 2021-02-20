@@ -1,94 +1,84 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { StoreContext } from "../context/storeContext";
 import useOrientation, { SCREEN } from "../hooks/useOrientation";
-import { FlatList, TextInput, View } from "react-native";
-import BottomSheetModal from "./bottomSheetModal";
-import { Button, Card, Icon, Text } from "@ui-kitten/components";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {FlatList, StyleSheet, TouchableHighlight, View} from "react-native";
+import { Card, Text } from "@ui-kitten/components";
+import AppText from "./appText";
 
-export const ListaCompras = () => {
-  const {productosComprados, setProductosComprados} = useContext(StoreContext);
-  const [primaraPantalla, setPrimeraPantalla] = useState(true);
+const styles = StyleSheet.create({
+  container: {flex: 1},
+  card: {flex: 1, margin: 5},
+  button: {
+    position: 'absolute',
+    bottom: 30,
+    right: 30,
+    zIndex: 999,
+    borderRadius: 60,
+    width: 60,
+    height: 60,
+  },
+  modalView: {
+    backgroundColor: 'lightgrey',
+    paddingVertical: 10,
+    borderTopStartRadius: 20,
+    borderTopEndRadius: 20,
+    height: '50%',
+    padding: 10,
+  },
+  modalContainer: {
+    flex: 1,
+    flexDirection: 'column-reverse',
+  },
+  textInput: {
+    height: 40,
+    borderColor: 'blue',
+    borderWidth: 2,
+    borderRadius: 20,
+    paddingHorizontal: 10,
+    backgroundColor: 'lightgrey',
+    marginVertical: 10,
+  },
+  modalButton: {
+    marginVertical: 10,
+  },
+  cardText: {textAlign: 'center', fontWeight: 'bold'},
+});
+
+
+export const ListaCompras = ({route}) => {
+  const {productosComprados, obtenerProductosDelComprador} = useContext(StoreContext);
+  const screenDirection = useOrientation();
+
+  const Item = ({title}) => (
+    <View>
+      <AppText content={title}/>
+    </View>
+  );
+
+  const renderItem = ({item}) => (
+    <TouchableHighlight
+      activeOpacity={0.6}
+      underlayColor="#DDDDDD" >
+      <Item title={item.nombre} />
+    </TouchableHighlight>
+  );
 
   return (
     <View style={styles.container}>
-      <BottomSheetModal
-        visible={modalVisible}
-        onClosePressed={() => setModalVisible(false)}
-        title={primaraPantalla ? 'Crear una categoria' : 'Elegir Color'}>
-        <>
-          {primaraPantalla && (
-            <PrimeraPantalla
-              nombreNuevaCategoria={nombreNuevaCategoria}
-              setNombreNuevaCategoria={setNombreNuevaCategoria}
-              colorNuevaCategoria={colorNuevaCategoria}
-              setPrimeraPantalla={setPrimeraPantalla}
-              crearCategoria={crearCategoria}
-            />
-          )}
-          {!primaraPantalla && (
-            <SegundaPantalla
-              setPrimeraPantalla={setPrimeraPantalla}
-              setColorNuevaCategoria={setColorNuevaCategoria}
-            />
-          )}
-        </>
-      </BottomSheetModal>
-      <Button
-        style={styles.button}
-        accessoryLeft={PlusIcon}
-        onPress={() => setModalVisible(true)}
-      />
       <FlatList
-        data={categorias}
-        key={screenDirection}
+        data={()=>obtenerProductosDelComprador(route.params.buyerLogged)}
+        keyExtractor={(item) => item.id.toString()}
         numColumns={screenDirection === SCREEN.LANDSCAPE ? 4 : 2}
-        renderItem={({item}) => {
-          return (
-            <Card
-              style={{...styles.card, backgroundColor: item.color}}
-              key={item.id}>
-              <Text style={styles.cardText}>{item.nombre}</Text>
-            </Card>
-          );
-        }}
-      />
+        renderItem={renderItem}
+        />
     </View>
   );
 };
-
-const PrimeraPantalla = ({
-                           nombreNuevaCategoria,
-                           setNombreNuevaCategoria,
-                           colorNuevaCategoria,
-                           setPrimeraPantalla,
-                           crearCategoria,
-                         }) => {
-  return (
-    <>
-      <TextInput
-        placeholder="Nombre de Categoria"
-        style={styles.textInput}
-        value={nombreNuevaCategoria}
-        onChangeText={(nuevoTexto) => {
-          setNombreNuevaCategoria(nuevoTexto);
-        }}
-      />
-      <TouchableOpacity onPress={() => setPrimeraPantalla(false)}>
-        <TextInput
-          placeholder="Color de Categoria"
-          editable={false}
-          style={styles.textInput}
-          value={colorNuevaCategoria}
-        />
-      </TouchableOpacity>
-      <Button style={styles.modalButton} onPress={() => crearCategoria()}>
-        Crear Categoria
-      </Button>
-    </>
-  );
-};
-
-const PlusIcon = (props) => <Icon {...props} name="plus-outline" />;
-
+//({item}) => {
+//           return (
+//             <Card style={{...styles.card, backgroundColor: item.color}} key={item.id}>
+//               <AppText style={styles.cardText} content={item.nombre}/>
+//             </Card>
+//           );}
+//
 export default ListaCompras;

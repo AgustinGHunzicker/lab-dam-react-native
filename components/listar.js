@@ -3,8 +3,9 @@ import {useNavigation} from '@react-navigation/native';
 import {View, StyleSheet, ScrollView} from 'react-native';
 import {Text} from '@ui-kitten/components';
 import {screens} from '../App';
-import Tarjeta from './tarjeta';
+import CardProducto from './cardProducto';
 import {StoreContext} from '../context/storeContext';
+import AppButton from "./appButton";
 
 const styles = StyleSheet.create({
   container: {
@@ -13,24 +14,20 @@ const styles = StyleSheet.create({
 });
 
 const Listar = ({route}) => {
-  const {productos, setProductos} = useContext(StoreContext);
+  const {productos, setProductos, productosComprados, setProductosComprados} = useContext(StoreContext);
   const navigator = useNavigation();
-
-  const onVerDetalles = () => { navigator.navigate(screens.detalle, {producto}); };
-  const onComprar = () => { setProductos(route.params.buyerLogged, producto); };
-
   return (
     <View style={styles.container}>
       {productos.length > 0 ? (
         <ScrollView>
           {productos.map((producto) => (
-            <Tarjeta
+            <CardProducto
+              producto={producto}
               titulo={producto.title}
               precio={producto.price}
-              onPressVerDetalles={ onVerDetalles }
-              onPressComprar={ onComprar }
-              key={producto.id}
-            />
+              onVerDetalles={() => {navigator.navigate(screens.detalle, {producto});}}
+              onComprar={() => {setProductosComprados([...productosComprados, producto])}}
+              key={producto.id}/>
           ))}
         </ScrollView>
       ) : (

@@ -37,7 +37,13 @@ export const Home = ({route}) => {
   const labelCompradores = 'Lista compradores';
   const labelCompras = 'Compras hechas';
 
-  const toListar = () => navigator.navigate(screens.listar, {buyerLogged});
+  const toListar = () => {
+    if (!buyerLogged?.id) {
+      alert("no hay id");
+      return; // No hay id de categoria o producto
+    }
+    navigator.navigate(screens.listar, {buyerLogged});
+  }
   const toCategorias = () => navigator.navigate(screens.listaCategorias);
   const toListaCompradores = () => navigator.navigate(screens.listaCompradores);
   const toListaCompras = () => navigator.navigate(screens.listaCompras, {buyerLogged});
