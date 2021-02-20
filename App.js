@@ -10,6 +10,7 @@ import {StoreProvider} from './context/storeContext';
 import {Home} from './components/home';
 import {ListaCategorias} from './components/listaCategorias';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
+import ListaCompradores from "./components/listaCompradores";
 import Shop from "./components/shop";
 import IniciarSesion from "./components/iniciarSesion";
 
@@ -21,7 +22,7 @@ export const screens = {
   detalle: 'Detalle de Producto',
   homepage: 'Página Principal',
   listaCategorias: 'Categorias',
-  compradores: 'Compradores',
+  listaCompradores: 'Compradores',
   shop: 'Comprar',
   altaComprador: 'Dar de alta comprador',
   bajaComprador: 'Dar de baja comprador',
@@ -36,7 +37,7 @@ const App = () => {
           <StatusBar barStyle="dark-content" />
           <Stack.Navigator>
             <Stack.Screen name={screens.iniciarSesion} initial={true} component={IniciarSesion} />
-            <Stack.Screen name={screens.compradores}  component={Compradores} />
+            <Stack.Screen name={screens.listaCompradores}  component={ListaCompradores} />
             <Stack.Screen name={screens.homepage} options={{headerShown: false}} component={Home} />
             <Stack.Screen name={screens.shop} component={Shop} />
             <Stack.Screen name={screens.listaCategorias}  component={ListaCategorias} />

@@ -34,11 +34,11 @@ export const Home = ({route}) => {
 
   const labelListar = 'Listar productos';
   const labelCategorias = 'Ver categorías';
-  const labelCompradores = 'Compradores';
+  const labelCompradores = 'Lista compradores';
 
   const toListar = () => navigator.navigate(screens.listar, {buyerLogged});
   const toCategorias = () => navigator.navigate(screens.listaCategorias, {buyerLogged});
-  const toCompradores = () => navigator.navigate(screens.compradores, {buyerLogged});
+  const toListaCompradores = () => navigator.navigate(screens.listaCompradores, {buyerLogged});
 
   return (
     <View style={styles.view}>
@@ -46,7 +46,7 @@ export const Home = ({route}) => {
       <View style={styles.container}>
         <AppButton style={styles.button} onPress={toListar} content={labelListar}/>
         <AppButton style={styles.button} onPress={toCategorias} content={labelCategorias}/>
-        <AppButton style={styles.button} onPress={toCompradores} content={labelCompradores}/>
+        <AppButton style={styles.button} onPress={toListaCompradores} content={labelCompradores}/>
       </View>
     </View>
   );

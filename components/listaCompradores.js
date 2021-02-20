@@ -2,11 +2,8 @@ import React, {useContext, useState} from 'react';
 import { Button, Icon, Text} from '@ui-kitten/components';
 import { Alert, SafeAreaView, StyleSheet, View, FlatList, TextInput, TouchableHighlight} from 'react-native';
 import { StoreContext } from '../context/storeContext';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import BottomSheetModal from './bottomSheetModal';
 import AppText from "./appText";
-import { AppStyles } from "./appStyles";
-import AppInput from "./appInput";
 import GestionarComprador from "./compradorPantalla";
 
 const styles = StyleSheet.create({
@@ -30,7 +27,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export const Compradores = () => {
+export const ListaCompradores = () => {
   const {compradores, setCompradores} = useContext(StoreContext);
 
   const [nuevoCompradorVisible, setNuevoCompradorVisible] = useState(true);
@@ -185,4 +182,5 @@ export const Compradores = () => {
 
 const PlusIcon = (props) => <Icon {...props} name="plus-outline" />;
 const EditIcon = (props) => <Icon {...props} name="edit-outline" />;
-export default Comprador;
+
+export default ListaCompradores;
