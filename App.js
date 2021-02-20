@@ -23,9 +23,8 @@ export const screens = {
   homepage: 'Página Principal',
   listaCategorias: 'Categorias',
   listaCompradores: 'Compradores',
-  shop: 'Comprar',
-  altaComprador: 'Dar de alta comprador',
-  bajaComprador: 'Dar de baja comprador',
+  listaCompras: 'Compras hechas',
+  shop: 'Comprar'
 };
 
 const App = () => {
@@ -38,6 +37,7 @@ const App = () => {
           <Stack.Navigator>
             <Stack.Screen name={screens.iniciarSesion} initial={true} component={IniciarSesion} />
             <Stack.Screen name={screens.listaCompradores}  component={ListaCompradores} />
+            <Stack.Screen name={screens.listaCompras}  component={ListaCompras} />
             <Stack.Screen name={screens.homepage} options={{headerShown: false}} component={Home} />
             <Stack.Screen name={screens.shop} component={Shop} />
             <Stack.Screen name={screens.listaCategorias}  component={ListaCategorias} />

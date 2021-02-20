@@ -12,9 +12,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const Listar = ({...props}) => {
-  const {productos} = useContext(StoreContext);
+const Listar = ({route}) => {
+  const {productos, setProductos} = useContext(StoreContext);
   const navigator = useNavigation();
+
+  const onVerDetalles = () => { navigator.navigate(screens.detalle, {producto}); };
+  const onComprar = () => { setProductos(route.params.buyerLogged, producto); };
 
   return (
     <View style={styles.container}>
@@ -24,9 +27,8 @@ const Listar = ({...props}) => {
             <Tarjeta
               titulo={producto.title}
               precio={producto.price}
-              onPressVerDetalles={() => {
-                navigator.navigate(screens.detalle, {producto});
-              }}
+              onPressVerDetalles={ onVerDetalles }
+              onPressComprar={ onComprar }
               key={producto.id}
             />
           ))}

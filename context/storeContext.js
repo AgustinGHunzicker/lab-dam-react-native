@@ -32,6 +32,7 @@ export const StoreProvider = ({children}) => {
     },
   ]);
   const [compradoresProductos, setCompradoresProductos] = useState({});
+  const [productosComprados, setProductosComprados] = useState({});
 
 
   const fetchData = async () => {
@@ -86,19 +87,6 @@ export const StoreProvider = ({children}) => {
     return results;
   };
 
-  const obtenerCompradoresDelProducto = (producto) => {
-    const compradoresId = Object.keys(compradoresProductos);
-    const compradoresIdDelProducto = compradoresId.reduce(
-      (acc, cur) =>
-        compradoresProductos[cur].includes(producto.id) ? [...acc, cur] : acc,
-      [],
-    );
-    const results = compradores.filter((c) =>
-      compradoresIdDelProducto.includes(c.id),
-    );
-    return results;
-  };
-
   const agregarProductoAComprador = (comprador, producto) => {
     if (!comprador?.id || !producto?.id) {
       return; // No hay id de categoria o producto
@@ -114,9 +102,20 @@ export const StoreProvider = ({children}) => {
     }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const obtenerCompradoresDelProducto = (producto) => {
+    const compradoresId = Object.keys(compradoresProductos);
+    const compradoresIdDelProducto = compradoresId.reduce(
+      (acc, cur) =>
+        compradoresProductos[cur].includes(producto.id) ? [...acc, cur] : acc,
+      [],
+    );
+    const results = compradores.filter((c) =>
+      compradoresIdDelProducto.includes(c.id),
+    );
+    return results;
+  };
+
+  useEffect(() => { fetchData(); }, []);
 
   return (
     <StoreContext.Provider

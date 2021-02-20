@@ -25,12 +25,21 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-evenly'
   },
+  item: {
+    flex: 1,
+    justifyContent: 'space-evenly',
+    backgroundColor: 'pink',
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 10,
+  }
 });
 
 export const ListaCompradores = () => {
   const {compradores, setCompradores} = useContext(StoreContext);
 
-  const [nuevoCompradorVisible, setNuevoCompradorVisible] = useState(true);
+  const [nuevoCompradorVisible, setNuevoCompradorVisible] = useState(false);
   const [editarCompradorVisible, setEditarCompradorVisible] = useState(false);
 
   const [nombreNuevoComprador, setNombreNuevoComprador] = useState('');
@@ -42,21 +51,36 @@ export const ListaCompradores = () => {
 
   const [pantallaInicio, setPantallaInicio] = useState(true);
 
+  const PlusIcon = (props) => <Icon {...props} name="plus-outline" />;
+
+  const alertIngreseNombre = 'Por favor ingrese un nombre';
+  const alertIngreseMail = 'Por favor ingrese un email';
+
+  const alertExitAdd = 'Se añadió un nuevo comprador';
+  const alertExitoEdit = 'Se editó el comprador';
+
+  const alertTitleEdit = 'Quitar comprador';
+  const alertDescriptionEdit = '¿Estás seguro que desea quitar el comprador?';
+
+  const indicacionEdit = '\n Toque en un item para editarlo \n';
+  const tituloAddBuyer = 'Añadir un comprador';
+  const tituloEditBuyer = 'Editar un comprador';
+
   const crearComprador = () => {
     if (!nombreNuevoComprador.trim()) {
-      alert('Por favor ingrese un nombre');
+      alert(alertIngreseNombre);
       return;
     }
 
     if (!emailNuevoComprador.trim()) {
-      alert('Por favor ingrese un email');
+      alert(alertIngreseMail);
       return;
     }
 
     //agrega el comprador a la lista
     setCompradores([...compradores, { nombre: nombreNuevoComprador, email: emailNuevoComprador, id: Math.random() } ]);
 
-    alert('Se añadió un nuevo comprador');
+    alert(alertExitAdd);
 
     setNombreNuevoComprador('');
     setEmailNuevoComprador('');
@@ -65,16 +89,16 @@ export const ListaCompradores = () => {
 
   const editarComprador = (compradorAEditar) => {
     if (!nombreComprador.trim()) {
-      alert('Por favor ingrese un nombre');
+      alert(alertIngreseNombre);
       return;
     }
 
     if (!emailComprador.trim()) {
-      alert('Por favor ingrese un email');
+      alert(alertIngreseMail);
       return;
     }
 
-    alert('Se editó el comprador');
+    alert(alertExitoEdit);
 
     const compradorYaEditado = compradores.map((compradorPrevioAEditar) => {
       if (compradorPrevioAEditar.id === compradorAEditar) {
@@ -89,8 +113,8 @@ export const ListaCompradores = () => {
   };
 
   const quitarComprador = (compradorAQuitar) => {
-    Alert.alert('Quitar comprador', '¿Estás seguro que desea quitar el comprador?',
-      [{text: 'Cancelar', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+    Alert.alert(alertTitleEdit, alertDescriptionEdit,
+      [{text: 'Cancelar',  style: 'cancel'},
         {text: 'OK', onPress: () => quitarDeLaLista(compradorAQuitar)}, ],
       {cancelable: false},
     );
@@ -103,7 +127,9 @@ export const ListaCompradores = () => {
   };
 
   const Item = ({title}) => (
-    <View style={styles.item}> <AppText style={styles.title} content={title}/></View>
+    <View style={styles.item}>
+      <AppText style={styles.title} content={title}/>
+    </View>
   );
 
   const renderItem = ({item}) => (
@@ -123,11 +149,32 @@ export const ListaCompradores = () => {
   return (
     <View style={styles.view}>
       <View style={styles.container}>
-        <AppText style={styles.baseText} content={'\n Toque en un item para editarlo \n'}/>
+        <AppText style={styles.baseText} content={indicacionEdit}/>
+
+        <BottomSheetModal
+          visible={editarCompradorVisible}
+          onClosePressed={() => setEditarCompradorVisible(false)}
+          title={tituloEditBuyer}>
+          <>
+            {pantallaInicio && (
+              <GestionarComprador
+                nombre={nombreComprador}
+                setNombre={setNombreComprador}
+                email={emailComprador}
+                setEmail={setEmailComprador}
+                idComprador={idComprador}
+                setPrimeraPantalla={setPantallaInicio}
+                accionSobreComprador1={editarComprador}
+                accionSobreComprador2={quitarComprador}
+              />
+            )}
+          </>
+        </BottomSheetModal>
+
         <BottomSheetModal
           visible={nuevoCompradorVisible}
           onClosePressed={() => setNuevoCompradorVisible(false)}
-          title={'Añadir un comprador'}>
+          title={tituloAddBuyer}>
           <>
             {pantallaInicio && (
               <GestionarComprador
@@ -142,45 +189,14 @@ export const ListaCompradores = () => {
           </>
         </BottomSheetModal>
 
-        <BottomSheetModal
-          visible={editarCompradorVisible}
-          onClosePressed={() => setEditarCompradorVisible(false)}
-          title={'Editar un comprador'}>
-          <>
-            {pantallaInicio && (
-              <GestionarComprador
-              nombre={nombreComprador}
-              setNombre={setNombreComprador}
-              email={emailComprador}
-              setEmail={setEmailComprador}
-              idComprador={idComprador}
-              setPrimeraPantalla={setPantallaInicio}
-              accionSobreComprador1={editarComprador}
-              accionSobreComprador2={quitarComprador}
-              />
-            )}
-          </>
-        </BottomSheetModal>
-
-        <Button
-          style={styles.button}
-          accessoryLeft={PlusIcon}
-          onPress={() => setNuevoCompradorVisible(true)}
-        />
+        <Button style={styles.button} accessoryLeft={PlusIcon} onPress={() => setNuevoCompradorVisible(true)}  />
 
         <SafeAreaView style={styles.container}>
-          <FlatList
-            data={compradores}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id.toString()}
-          />
+          <FlatList data={compradores} renderItem={renderItem} keyExtractor={(item) => item.id.toString()} />
         </SafeAreaView>
       </View>
     </View>
   );
 } ;
-
-const PlusIcon = (props) => <Icon {...props} name="plus-outline" />;
-const EditIcon = (props) => <Icon {...props} name="edit-outline" />;
 
 export default ListaCompradores;
